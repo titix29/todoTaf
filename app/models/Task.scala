@@ -12,12 +12,12 @@ case class Task(id: Pk[Long], title: String, comment: String, dueDate: Option[Da
 
 object Task {
 
-	def all() : List[Task] = DB.withConnection { implicit connection =>
-		SQL("SELECT * FROM Task").as(taskParser *)
+	def all(): List[Task] = DB.withConnection { implicit connection =>
+		SQL("SELECT * FROM task").as(taskParser *)
 	}
 	
 	def create(task: Task) = DB.withConnection { implicit connection =>
-		SQL("INSERT INTO Task(title, comment, due_date) VALUES({title}, {comment}, {dueDate})").on(
+		SQL("INSERT INTO task(title, comment, due_date) VALUES({title}, {comment}, {dueDate})").on(
 			'title -> task.title,
 			'comment -> task.comment,
 			'dueDate -> task.dueDate
@@ -25,7 +25,7 @@ object Task {
 	}
 	
 	def delete(id: Long) = DB.withConnection { implicit connection =>
-		SQL("DELETE FROM Task WHERE id = {id}").on(
+		SQL("DELETE FROM task WHERE id = {id}").on(
 			'id -> id
 		).executeUpdate()
 	}
