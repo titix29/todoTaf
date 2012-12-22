@@ -18,7 +18,7 @@
 		<tbody>
 			@for(task <- tasks) {
 				<tr>
-					<td>@projects.find(p => p.id.get == task.projectId.get).get.name</td>
+					<td>@projects.find(p => p.id.get == task.projectId.getOrElse(-1)).map(p => p.name).getOrElse("No project")</td>
 					<td>@task.title</td>
 					<td>@task.comment</td>
 					<td>@task.dueDate.map(date => date.format("dd/MM/yyyy")).getOrElse("N/A")</td>

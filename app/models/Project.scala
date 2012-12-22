@@ -21,8 +21,12 @@ object Project {
 		).executeUpdate()
 	}
 	
-	// TODO : withTransaction and reset task project_id
-	def delete(id: Long) = DB.withConnection { implicit connection =>
+	def delete(id: Long) = DB.withTransaction { implicit connection =>
+		// set the tasks to no project
+		SQL("UPDATE task SET project_id = NULL WHERE project_id = {id}").on(
+			'id -> id
+		).executeUpdate()
+	
 		SQL("DELETE FROM project WHERE id = {id}").on(
 			'id -> id
 		).executeUpdate()
