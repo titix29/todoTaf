@@ -8,17 +8,26 @@
 	
 	<div class="row">
 		<div class="span8">
-			<ul>
-				@tasks.map { task =>
-					<li>
-						<span title="@task.dueDate">@task.title</span>
-						
-						@form(routes.TaskController.deleteTask(task.id.get)) {
-							<input type="submit" value="Delete" />
-						}
-					</li>
-				}
-			</ul>
+			<table id="taskTable" class="table">
+				<thead>
+					<tr>
+						<th>Project</th>
+						<th>Title</th>
+						<th>Comment</th>
+						<th>Due Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for(task <- tasks) {
+						<tr>
+							<td>@projects.find(p => p.id.get == task.projectId.get).get.name</td>
+							<td>@task.title</td>
+							<td>@task.comment</td>
+							<td>@task.dueDate.map(date => date.format("dd/MM/yyyy")).getOrElse("N/A")</td>
+						</tr>
+					}
+				</tbody>
+			</table>
 		</div>
 		
 		<div class="span4">
@@ -37,6 +46,8 @@
 	
 	<script>
 		$(function() {
+			$("#taskTable").dataTable();
+		
 			// input type date causes different browser behaviors
 			$("input.dateField").datepicker({
 				dateFormat: "dd/mm/yy"
