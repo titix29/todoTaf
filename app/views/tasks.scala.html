@@ -1,4 +1,4 @@
-@(tasks: List[Task], taskForm: Form[Task])
+@(tasks: List[Task], projects: List[Project], taskForm: Form[Task])
 
 @import helper._
 
@@ -27,8 +27,8 @@
 					<legend>New task</legend>
 					@inputText(taskForm("title"))
 					@textarea(taskForm("comment"))
-					@inputText(taskForm("dueDate"), 'class -> "dateField")
-					
+					@inputText(taskForm("dueDate"), 'class -> "dateField", '_label -> "Due date")
+					@select(taskForm("projectId"), options = projects.map{p => p.id.get.toString -> p.name}, '_label -> "Project")
 					<input type="submit" value="Create" class="btn" />
 				</fieldset>
 			}
