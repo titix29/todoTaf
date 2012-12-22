@@ -8,5 +8,9 @@ object Application extends Controller {
 	def index = Action {
 		Redirect(controllers.routes.TaskController.index)
 	}
+	
+	def about = Action {
+		Ok(views.html.about())
+	}
   
 }

@@ -23,14 +23,21 @@
 				<div class="navbar-inner">
 					<a class="brand" href="@routes.Application.index">TODO Taf</a>
 					<ul class="nav">
-						<li><a href="@routes.TaskController.index">Tasks</a></li>
-						<li><a href="@routes.ProjectController.index">Projects</a></li>
-						<li><a href="#">About</a></li>
+						<li id="tasksMenu"><a href="@routes.TaskController.index">Tasks</a></li>
+						<li id="projectsMenu"><a href="@routes.ProjectController.index">Projects</a></li>
+						<li id="aboutMenu"><a href="@routes.Application.about">About</a></li>
 					</ul>
 				</div>
 			</div>
 			
 			@content
 		</div>
+		
+		<script type="text/javascript">
+			function selectMenu(menuItem) {
+				$("ul.nav li").removeClass("active");
+				$("#" + menuItem).addClass("active");
+			}
+		</script>
     </body>
 </html>

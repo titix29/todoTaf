@@ -1,0 +1,17 @@
+@import play.api._
+
+@main("About") {
+
+    <div class="hero-unit">
+		<h1>@Play.current.configuration.getString("app.name") v@Play.current.configuration.getString("app.version")</h1>
+		<p>This is a sample TODO list application to discover Play 2.1, Twitter Bootstrap and JQuery. But it could be useful
+		for managing tasks at work.
+		</p>
+	</div>
+	
+	<script type="text/javascript">
+		$(function() {
+			selectMenu("aboutMenu");
+		});
+	</script>
+}
