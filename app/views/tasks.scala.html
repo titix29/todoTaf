@@ -1,0 +1,40 @@
+@(tasks: List[Task], taskForm: Form[Task])
+
+@import helper._
+
+@main("Some tasks") {
+    
+	<h1>@tasks.size task(s)</h1>
+	
+	<ul>
+		@tasks.map { task =>
+			<li>
+				<span title="@task.dueDate">@task.title</span>
+				
+				@form(routes.TaskController.deleteTask(task.id.get)) {
+					<input type="submit" value="Delete" />
+				}
+			</li>
+		
+		}
+	</ul>
+	
+	<h2>Add a new task</h2>
+	
+	@form(routes.TaskController.newTask) {
+		@inputText(taskForm("title"))
+		@textarea(taskForm("comment"))
+		@inputText(taskForm("dueDate"), 'class -> "dateField")
+		
+		<input type="submit" value="Create" />
+	}
+	
+	<script>
+		$(function() {
+			// input type date causes different browser behaviors
+			$("input.dateField").datepicker({
+				dateFormat: "dd/mm/yy"
+			});
+		});
+	</script>
+}
