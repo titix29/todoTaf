@@ -4,30 +4,36 @@
 
 @main("Some tasks") {
     
-	<h1>@tasks.size task(s)</h1>
+	<h2>Tasks (@tasks.size)</h2>
 	
-	<ul>
-		@tasks.map { task =>
-			<li>
-				<span title="@task.dueDate">@task.title</span>
-				
-				@form(routes.TaskController.deleteTask(task.id.get)) {
-					<input type="submit" value="Delete" />
+	<div class="row">
+		<div class="span8">
+			<ul>
+				@tasks.map { task =>
+					<li>
+						<span title="@task.dueDate">@task.title</span>
+						
+						@form(routes.TaskController.deleteTask(task.id.get)) {
+							<input type="submit" value="Delete" />
+						}
+					</li>
 				}
-			</li>
+			</ul>
+		</div>
 		
-		}
-	</ul>
-	
-	<h2>Add a new task</h2>
-	
-	@form(routes.TaskController.newTask) {
-		@inputText(taskForm("title"))
-		@textarea(taskForm("comment"))
-		@inputText(taskForm("dueDate"), 'class -> "dateField")
-		
-		<input type="submit" value="Create" />
-	}
+		<div class="span4">
+			@form(routes.TaskController.newTask) {
+				<fieldset>
+					<legend>New task</legend>
+					@inputText(taskForm("title"))
+					@textarea(taskForm("comment"))
+					@inputText(taskForm("dueDate"), 'class -> "dateField")
+					
+					<input type="submit" value="Create" class="btn" />
+				</fieldset>
+			}
+		</div>
+	</div>
 	
 	<script>
 		$(function() {
