@@ -6,46 +6,57 @@
     
 	<h2>Tasks (@tasks.size)</h2>
 	
-	<div class="row">
-		<div class="span8">
-			<table id="taskTable" class="table">
-				<thead>
-					<tr>
-						<th>Project</th>
-						<th>Title</th>
-						<th>Comment</th>
-						<th>Due Date</th>
-					</tr>
-				</thead>
-				<tbody>
-					@for(task <- tasks) {
-						<tr>
-							<td>@projects.find(p => p.id.get == task.projectId.get).get.name</td>
-							<td>@task.title</td>
-							<td>@task.comment</td>
-							<td>@task.dueDate.map(date => date.format("dd/MM/yyyy")).getOrElse("N/A")</td>
-						</tr>
-					}
-				</tbody>
-			</table>
-		</div>
-		
-		<div class="span4">
-			@form(routes.TaskController.newTask) {
-				<fieldset>
-					<legend>New task</legend>
-					@inputText(taskForm("title"))
-					@textarea(taskForm("comment"))
-					@inputText(taskForm("dueDate"), 'class -> "dateField", '_label -> "Due date")
-					@select(taskForm("projectId"), options = projects.map{p => p.id.get.toString -> p.name}, '_label -> "Project")
-					<input type="submit" value="Create" class="btn" />
-				</fieldset>
+	<table id="taskTable" class="table">
+		<thead>
+			<tr>
+				<th>Project</th>
+				<th>Title</th>
+				<th>Comment</th>
+				<th>Due Date</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for(task <- tasks) {
+				<tr>
+					<td>@projects.find(p => p.id.get == task.projectId.get).get.name</td>
+					<td>@task.title</td>
+					<td>@task.comment</td>
+					<td>@task.dueDate.map(date => date.format("dd/MM/yyyy")).getOrElse("N/A")</td>
+				</tr>
 			}
-		</div>
+		</tbody>
+	</table>
+	
+	<br />
+	<button id="createTask" class="btn">Create task</button>
+	
+	<div id="createTaskForm" title="Create new task">
+		@form(routes.TaskController.newTask) {
+			<fieldset>
+				@inputText(taskForm("title"))
+				@textarea(taskForm("comment"))
+				@inputText(taskForm("dueDate"), 'class -> "dateField", '_label -> "Due date")
+				@select(taskForm("projectId"), options = projects.map{p => p.id.get.toString -> p.name}, '_label -> "Project")
+			</fieldset>
+		}
 	</div>
 	
 	<script>
 		$(function() {
+			$("#createTaskForm").dialog({
+				autoOpen: false,
+				modal: true,
+				buttons: {
+					"Create task": function() {
+						$(this).children(":first").submit();
+					}
+				}
+			});
+			
+			$("#createTask").click(function() {
+				$("#createTaskForm").dialog("open");
+			});
+		
 			$("#taskTable").dataTable();
 		
 			// input type date causes different browser behaviors
