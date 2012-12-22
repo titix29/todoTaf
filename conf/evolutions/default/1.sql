@@ -9,8 +9,17 @@ CREATE TABLE task (
 	comment varchar(255),
 	due_date timestamp
 );
+
+CREATE SEQUENCE project_id_seq;
+CREATE TABLE project (
+    id integer NOT NULL DEFAULT nextval('project_id_seq'),
+    name varchar(255),
+	comment varchar(255)
+);
  
 # --- !Downs
- 
+
+DROP TABLE project;
+DROP SEQUENCE project_id_seq;
 DROP TABLE task;
 DROP SEQUENCE task_id_seq;
