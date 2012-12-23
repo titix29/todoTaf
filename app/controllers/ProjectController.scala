@@ -10,6 +10,8 @@ import anorm._
 
 import models._
 
+import java.util.{Date}
+
 object ProjectController extends Controller {
   
   	def index = Action {
@@ -35,7 +37,9 @@ object ProjectController extends Controller {
 		mapping(
 			"id" -> ignored(NotAssigned: Pk[Long]),
 			"name" -> nonEmptyText,
-			"comment" -> text
+			"comment" -> text,
+			// TODO: check if ignored or optional
+			"creationDate" -> ignored(new Date)
 		)(Project.apply)(Project.unapply)
 	)
   

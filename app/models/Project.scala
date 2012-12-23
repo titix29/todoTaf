@@ -6,7 +6,9 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class Project(id: Pk[Long], name: String, comment: String)
+import java.util.{Date}
+
+case class Project(id: Pk[Long], name: String, comment: String, creationDate: Date)
 
 object Project {
 	
@@ -15,9 +17,10 @@ object Project {
 	}
 	
 	def create(project: Project) = DB.withConnection { implicit connection =>
-		SQL("INSERT INTO project(name, comment) VALUES({name}, {comment})").on(
+		SQL("INSERT INTO project(name, comment, creation_date) VALUES({name}, {comment}, {creationDate})").on(
 			'name -> project.name,
-			'comment -> project.comment
+			'comment -> project.comment,
+			'creationDate -> project.creationDate
 		).executeUpdate()
 	}
 	
@@ -35,8 +38,9 @@ object Project {
 	val projectParser = {
 		get[Pk[Long]]("id") ~
 		get[String]("name") ~
-		get[String]("comment") map {
-			case id~name~comment => Project(id, name, comment)
+		get[String]("comment") ~
+		get[Date]("creation_date") map {
+			case id~name~comment~creationDate => Project(id, name, comment, creationDate)
 		}
 	}
 }
