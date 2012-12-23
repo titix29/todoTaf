@@ -18,7 +18,7 @@
 		</thead>
 		<tbody>
 			@for(task <- tasks) {
-				<tr>
+				<tr data-taskid="@task.id">
 					<td>@projects.find(p => p.id.get == task.projectId.getOrElse(-1)).map(p => p.name).getOrElse("No project")</td>
 					<td>@task.title</td>
 					<td>@task.comment</td>
@@ -45,8 +45,10 @@
 	
 	<script type="text/javascript">
 		$(function() {
+			// Menu stuff
 			selectMenu("tasksMenu");
 		
+			// Popup stuff
 			$("#createTaskForm").dialog({
 				autoOpen: false,
 				modal: true,
@@ -56,12 +58,28 @@
 					}
 				}
 			});
-			
 			$("#createTask").click(function() {
 				$("#createTaskForm").dialog("open");
 			});
 		
-			$("#taskTable").dataTable();
+			// Datatable stuff
+			$("#taskTable").dataTable({
+				"sDom": 'T<"clear">lfrtip',
+				"oTableTools": {
+					"aButtons": [],
+					"sRowSelect": "single" 
+				}
+			});
+			$("#taskTable tr").click(function(event) {
+				var taskId = $(this).data("taskid");
+				console.log("taskId: " + taskId);
+			});
+			$(this).keyup(function(event) {
+				if (event.which == 27) {
+					var taskTable = TableTools.fnGetMasters()[0];
+					taskTable.fnSelectNone();
+				}
+			});
 		
 			// input type date causes different browser behaviors
 			$("input.dateField").datepicker({
