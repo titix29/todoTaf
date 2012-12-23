@@ -12,6 +12,7 @@
 				<th>Project</th>
 				<th>Title</th>
 				<th>Comment</th>
+				<th>Status</th>
 				<th>Due Date</th>
 			</tr>
 		</thead>
@@ -21,6 +22,7 @@
 					<td>@projects.find(p => p.id.get == task.projectId.getOrElse(-1)).map(p => p.name).getOrElse("No project")</td>
 					<td>@task.title</td>
 					<td>@task.comment</td>
+					<td>@task.status</td>
 					<td>@task.dueDate.map(date => date.format("dd/MM/yyyy")).getOrElse("N/A")</td>
 				</tr>
 			}

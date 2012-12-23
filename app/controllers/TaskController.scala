@@ -37,8 +37,11 @@ object TaskController extends Controller {
 			"title" -> nonEmptyText,
 			"comment" -> text,
 			"dueDate" -> optional(date("dd/MM/yyyy")),
+			"status" -> optional(text),
 			"projectId" -> optional(longNumber)
-		)(Task.apply)(Task.unapply)
+		)
+		((id, title, comment, dueDate, status, projectId) => Task(id, title, comment, dueDate, TaskStatus.withName(status.getOrElse("NOT_STARTED")), projectId))
+		((task: Task) => Some(task.id, task.title, task.comment, task.dueDate, Option(task.status.toString), task.projectId))
 	)
   
 }
