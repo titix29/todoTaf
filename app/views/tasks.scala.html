@@ -14,6 +14,7 @@
 				<th>Comment</th>
 				<th>Status</th>
 				<th>Due Date</th>
+				<th>Actions</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -24,6 +25,11 @@
 					<td>@task.comment</td>
 					<td>@task.status</td>
 					<td>@task.dueDate.map(date => date.format("dd/MM/yyyy")).getOrElse("N/A")</td>
+					<td>
+					@form(routes.TaskController.deleteTask(task.id.get)) {
+						<input type="submit" class="btn" value="Delete" />
+					}
+					</td>
 				</tr>
 			}
 		</tbody>
@@ -45,46 +51,7 @@
 	
 	<script type="text/javascript">
 		$(function() {
-			// Menu stuff
-			selectMenu("tasksMenu");
-		
-			// Popup stuff
-			$("#createTaskForm").dialog({
-				autoOpen: false,
-				modal: true,
-				buttons: {
-					"Create task": function() {
-						$(this).children(":first").submit();
-					}
-				}
-			});
-			$("#createTask").click(function() {
-				$("#createTaskForm").dialog("open");
-			});
-		
-			// Datatable stuff
-			$("#taskTable").dataTable({
-				"sDom": 'T<"clear">lfrtip',
-				"oTableTools": {
-					"aButtons": [],
-					"sRowSelect": "single" 
-				}
-			});
-			$("#taskTable tr").click(function(event) {
-				var taskId = $(this).data("taskid");
-				console.log("taskId: " + taskId);
-			});
-			$(this).keyup(function(event) {
-				if (event.which == 27) {
-					var taskTable = TableTools.fnGetMasters()[0];
-					taskTable.fnSelectNone();
-				}
-			});
-		
-			// input type date causes different browser behaviors
-			$("input.dateField").datepicker({
-				dateFormat: "dd/mm/yy"
-			});
+			initTaskView();
 		});
 	</script>
 }
