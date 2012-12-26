@@ -16,12 +16,12 @@ object Project {
 		SQL("SELECT * FROM project").as(projectParser *)
 	}
 	
-	def create(project: Project) = DB.withConnection { implicit connection =>
+	def create(project: Project): Option[Long] = DB.withConnection { implicit connection =>
 		SQL("INSERT INTO project(name, comment, creation_date) VALUES({name}, {comment}, {creationDate})").on(
 			'name -> project.name,
 			'comment -> project.comment,
 			'creationDate -> project.creationDate
-		).executeUpdate()
+		).executeInsert()
 	}
 	
 	def delete(id: Long) = DB.withTransaction { implicit connection =>
