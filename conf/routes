@@ -12,6 +12,8 @@ POST	/projects/:id/delete		controllers.ProjectController.deleteProject(id: Long)
 
 GET		/tasks						controllers.TaskController.index
 POST	/tasks						controllers.TaskController.newTask
+GET		/tasks/:id					controllers.TaskController.findById(id: Long)
+POST	/tasks/:id/update			controllers.TaskController.updateTask(id: Long)
 POST	/tasks/:id/delete			controllers.TaskController.deleteTask(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path

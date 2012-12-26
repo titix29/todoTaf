@@ -19,7 +19,7 @@
 		</thead>
 		<tbody>
 			@for(task <- tasks) {
-				<tr data-taskid="@task.id">
+				<tr data-task-id="@task.id">
 					<td>@projects.find(p => p.id.get == task.projectId.getOrElse(-1)).map(p => p.name).getOrElse("No project")</td>
 					<td>@task.title</td>
 					<td>@task.comment</td>
@@ -37,6 +37,23 @@
 	
 	<br />
 	<button id="createTask" class="btn">Create task</button>
+	
+	<div id="updateTaskForm">
+		<form class="form-horizontal">
+			<fieldset>
+				<legend>Update task</legend>
+				<div class="control-group">
+					<label for="taskTitle" class="control-label">Title</label>
+					<div class="controls">
+						<input id="taskTitle" name="taskTitle" type="text" />
+					</div>
+				</div>
+				<div class="form-actions">
+					<button class="btn">Update</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
 	
 	<div id="createTaskForm" title="Create new task">
 		@form(routes.TaskController.newTask) {

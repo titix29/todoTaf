@@ -20,7 +20,7 @@ function initTaskView() {
 	// Menu stuff
 	selectMenu("tasksMenu");
 
-	// Popup stuff
+	// Create popup stuff
 	$("#createTaskForm").dialog({
 		autoOpen: false,
 		modal: true,
@@ -33,6 +33,9 @@ function initTaskView() {
 	$("#createTask").click(function() {
 		$("#createTaskForm").dialog("open");
 	});
+	
+	// Edit popup stuff
+	$("#updateTaskForm").hide();
 
 	// Datatable stuff
 	$("#taskTable").dataTable({
@@ -43,13 +46,17 @@ function initTaskView() {
 		}
 	});
 	$("#taskTable tr").click(function(event) {
-		var taskId = $(this).data("taskid");
-		console.log("taskId: " + taskId);
+		var taskId = $(this).data("taskId");
+		updateTask(taskId);
 	});
 	$(this).keyup(function(event) {
 		if (event.which == 27) {
+			// deselect all on ESC key
 			var taskTable = TableTools.fnGetMasters()[0];
 			taskTable.fnSelectNone();
+			
+			// hide update task form
+			$("#updateTaskForm").hide();
 		}
 	});
 
@@ -57,4 +64,16 @@ function initTaskView() {
 	$("input.dateField").datepicker({
 		dateFormat: "dd/mm/yy"
 	});
+}
+
+function updateTask(id) {
+	// retrieve data
+	$.getJSON("/tasks/" + id)
+		.done(function(data) { loadUpdateTaskForm(data); })
+		.fail(function(err) { alert(err); });
+}
+
+function loadUpdateTaskForm(task) {
+	$("#updateTaskForm").show();
+	$("#taskTitle").val(task.title);
 }

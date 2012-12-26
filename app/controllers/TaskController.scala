@@ -2,6 +2,7 @@ package controllers
 
 import play.api._
 import play.api.mvc._
+import play.api.libs.json.Json._
 
 import play.api.data._
 import play.api.data.Forms._
@@ -15,6 +16,10 @@ object TaskController extends Controller {
 	def index = Action {
 		Ok(views.html.tasks(Task.all(), Project.all(), taskForm))
 	}
+	
+	def findById(id: Long) = Action {
+		Task.findById(id).map { t =>  Ok(toJson(t)) }.getOrElse(NotFound)
+	}
   
 	def newTask = Action { implicit request =>
 		taskForm.bindFromRequest.fold(
@@ -25,6 +30,8 @@ object TaskController extends Controller {
 			}
 		)
 	}
+	
+	def updateTask(id: Long) = TODO
   
 	def deleteTask(id: Long) = Action {
 		Task.delete(id)
