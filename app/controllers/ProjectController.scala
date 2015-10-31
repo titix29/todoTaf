@@ -35,7 +35,7 @@ object ProjectController extends Controller {
   
 	val projectForm = Form(
 		mapping(
-			"id" -> ignored(NotAssigned: Pk[Long]),
+			"id" -> ignored(Option(-1L)),
 			"name" -> nonEmptyText,
 			"comment" -> text,
 			// TODO: check if ignored or optional

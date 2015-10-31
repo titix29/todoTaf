@@ -11,7 +11,7 @@ import anorm.SqlParser._
 
 import java.util.{Date}
 
-case class Task(id: Pk[Long], title: String, comment: String, dueDate: Option[Date], status: TaskStatus.Value = TaskStatus.NOT_STARTED, projectId: Option[Long])
+case class Task(id: Option[Long], title: String, comment: String, dueDate: Option[Date], status: TaskStatus.Value = TaskStatus.NOT_STARTED, projectId: Option[Long])
 
 object Task {
 
@@ -42,7 +42,7 @@ object Task {
 	}
 	
 	val taskParser = {
-		get[Pk[Long]]("id") ~
+		get[Option[Long]]("id") ~
 		get[String]("title") ~
 		get[String]("comment") ~
 		get[Option[Date]]("due_date") ~ 
@@ -58,7 +58,7 @@ object Task {
 	implicit object TaskFormat extends Format[Task] {
 		
 		def reads(json: JsValue) = JsSuccess(Task(
-			Id((json \ "id").as[Long]),
+			(json \ "id").asOpt[Long],
 			(json \ "title").as[String],
 			(json \ "comment").as[String],
 			(json \ "dueDate").asOpt[Date],

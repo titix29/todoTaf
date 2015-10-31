@@ -40,7 +40,7 @@ object TaskController extends Controller {
 	
 	val taskForm = Form(
 		mapping(
-			"id" -> ignored(NotAssigned: Pk[Long]),
+			"id" -> ignored(Option(-1L)),
 			"title" -> nonEmptyText,
 			"comment" -> text,
 			"dueDate" -> optional(date("dd/MM/yyyy")),

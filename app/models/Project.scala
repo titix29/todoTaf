@@ -8,7 +8,7 @@ import anorm.SqlParser._
 
 import java.util.{Date}
 
-case class Project(id: Pk[Long], name: String, comment: String, creationDate: Date)
+case class Project(id: Option[Long], name: String, comment: String, creationDate: Date)
 
 object Project {
 	
@@ -36,7 +36,7 @@ object Project {
 	}
 	
 	val projectParser = {
-		get[Pk[Long]]("id") ~
+		get[Option[Long]]("id") ~
 		get[String]("name") ~
 		get[String]("comment") ~
 		get[Date]("creation_date") map {
