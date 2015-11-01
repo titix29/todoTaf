@@ -53,8 +53,11 @@ object Task {
 	}
 	
 	// Cannot use simple/default (de)serializer (http://mandubian.com/2012/11/11/JSON-inception/) because of Pk[Long] type
-	// implicit val taskWrites = Json.writes[Task]
+	implicit val taskWrites = Json.writes[Task]
+	implicit val taskStatusReads: Reads[TaskStatus.Value] = EnumUtils.enumReads(TaskStatus)
+	implicit val taskReads = Json.reads[Task]
 	// http://mandubian.com/2012/10/01/unveiling-play-2-dot-1-json-api-part2-writes-format-combinators/
+	/*
 	implicit object TaskFormat extends Format[Task] {
 		
 		def reads(json: JsValue) = JsSuccess(Task(
@@ -75,6 +78,7 @@ object Task {
 			"projectId" -> JsNumber(long2bigDecimal(task.projectId.getOrElse(Long.box(-1))))
 		))
 	}
+	*/
 }
 
 object TaskStatus extends Enumeration {
@@ -84,4 +88,24 @@ object TaskStatus extends Enumeration {
 	val NOT_STARTED = Value("NOT_STARTED")
 	val PENDING = Value("PENDING")
 	val FINISHED = Value("FINISHED")
+}
+
+// http://stackoverflow.com/questions/15488639/how-to-write-readst-and-writest-in-scala-enumeration-play-framework-2-1
+object EnumUtils {
+  def enumReads[E <: Enumeration](enum: E): Reads[E#Value] = new Reads[E#Value] {
+    def reads(json: JsValue): JsResult[E#Value] = json match {
+      case JsString(s) => {
+        try {
+          JsSuccess(enum.withName(s))
+        } catch {
+          case _: NoSuchElementException => JsError(s"Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'")
+        }
+      }
+      case _ => JsError("String value expected")
+    }
+  }
+
+  def enumWrites[E <: Enumeration]: Writes[E#Value] = new Writes[E#Value] {
+    def writes(v: E#Value): JsValue = JsString(v.toString)
+  }
 }

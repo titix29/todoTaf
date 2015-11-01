@@ -7,6 +7,10 @@ import play.api.libs.json.Json._
 import play.api.data._
 import play.api.data.Forms._
 
+import play.api.i18n.Messages.Implicits._
+
+import play.api.Play.current
+
 import anorm._
 
 import models._
